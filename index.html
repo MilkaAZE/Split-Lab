@@ -405,6 +405,10 @@
   <!-- ---------- FORMULAR ---------- -->
   <section class="card">
     <h2 data-i18n="form.heading">Renndaten eingeben</h2>
+    <div id="edit-banner" style="display:none; margin-bottom:1.2rem; padding:0.8rem 1rem; background:var(--paper); border:1px solid var(--aqua); border-radius:8px; font-size:0.85rem;">
+      <span data-i18n="form.editingNotice">Du bearbeitest einen bestehenden Eintrag.</span>
+      <a href="#" id="edit-cancel-link" style="color:var(--coral); text-decoration:none; margin-left:0.6rem;" data-i18n="form.editCancel">Abbrechen</a>
+    </div>
     <form id="race-form">
 
       <fieldset>
@@ -524,7 +528,7 @@
         <textarea id="notiz" rows="3" style="width:100%; padding:0.6rem 0.7rem; border:1px solid var(--line); border-radius:8px; font-family:var(--font-body); font-size:0.9rem; color:var(--ink); background:var(--paper); resize:vertical;"></textarea>
       </fieldset>
 
-      <button type="submit" data-i18n="form.submit">Rennen auswerten</button>
+      <button type="submit" id="form-submit-btn" data-i18n="form.submit">Rennen auswerten</button>
     </form>
   </section>
 
@@ -649,6 +653,7 @@
     <table>
       <thead>
         <tr>
+          <th data-i18n="history.table.compare">Vgl.</th>
           <th data-i18n="history.table.date">Datum</th>
           <th data-i18n="history.table.category">Kategorie</th>
           <th data-i18n="history.table.race">Rennen</th>
@@ -658,6 +663,7 @@
       </thead>
       <tbody id="history-table"></tbody>
     </table>
+    <button type="button" id="compare-btn" style="display:none; margin-top:1rem; margin-right:0.6rem;" data-i18n="compare.button">Ausgewählte vergleichen</button>
     <button type="button" id="csv-export-btn" style="margin-top:1rem; background:var(--paper); color:var(--navy); border:1px solid var(--line);" data-i18n="history.csvExport">Verlauf als CSV exportieren</button>
   </section>
 
@@ -757,6 +763,25 @@
         <tbody id="bl-table"></tbody>
       </table>
       <p class="pool-caption" id="bl-empty-note" style="display:none;" data-i18n="leaderboard.empty">Noch keine Rennen für diese Auswahl.</p>
+    </section>
+  </div>
+
+  <!-- ---------- SEITE: RENNVERGLEICH (zwei eigene Einträge) ---------- -->
+  <div id="page-vergleich" style="display:none;">
+    <button type="button" id="vgl-zurueck-btn" style="margin-bottom:1rem; background:var(--paper); color:var(--navy); border:1px solid var(--line);" data-i18n="compare.back">← Zurück zum Verlauf</button>
+    <section class="card">
+      <h2 data-i18n="compare.heading">Rennvergleich</h2>
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="compare.metric">Kennzahl</th>
+            <th id="vgl-header-a"></th>
+            <th id="vgl-header-b"></th>
+            <th data-i18n="compare.difference">Differenz</th>
+          </tr>
+        </thead>
+        <tbody id="vgl-table"></tbody>
+      </table>
     </section>
   </div>
 
@@ -926,6 +951,10 @@
       "form.label.breaths2": "Atemzüge, 2. Hälfte (25–50m)",
       "form.legend.note": "Notiz (optional)",
       "form.submit": "Rennen auswerten",
+      "form.editingNotice": "Du bearbeitest einen bestehenden Eintrag.",
+      "form.editCancel": "Abbrechen",
+      "form.saveEdit": "Änderungen speichern",
+      "history.edit": "Bearbeiten",
       "stroke.freistil": "Freistil (Kraul)",
       "stroke.ruecken": "Rücken",
       "stroke.brust": "Brust",
@@ -970,6 +999,7 @@
       "chart.swolfExplain": "SWOLF (\"Swim\" + \"Golf\") misst deine Schwimmeffizienz: Sekunden pro Bahn plus Anzahl Züge — genau wie beim Golf ist ein <strong>niedrigerer</strong> Wert besser. Der Wert ist nur mit deinen eigenen früheren Zeiten vergleichbar, nicht mit anderen Schwimmern (unterschiedliche Körpergröße/Armspannweite beeinflussen ihn stark).",
       "chart.swolfNotEnoughData": "Noch nicht genug Rennen mit erfasstem 25m-Split und Zügen für einen SWOLF-Verlauf (mindestens 2 nötig).",
       "history.heading": "Dein Verlauf",
+      "history.table.compare": "Vgl.",
       "history.table.date": "Datum",
       "history.table.category": "Kategorie",
       "history.table.race": "Rennen",
@@ -1003,6 +1033,12 @@
       "compare.behindRecordNoName": "{diff} s hinter dem {label} ({time} s).",
       "compare.aheadRecordNoName": "{diff} s vor dem {label} ({time} s).",
       "compare.noPreviousBest": "Noch keine Bestzeit für diese Lage/Bahnlänge — trag sie oben unter „Bestzeiten verwalten“ ein oder analysiere ein Rennen.",
+      "compare.button": "Ausgewählte vergleichen",
+      "compare.pickTwo": "Bitte genau zwei Rennen zum Vergleichen auswählen.",
+      "compare.heading": "Rennvergleich",
+      "compare.back": "← Zurück zum Verlauf",
+      "compare.metric": "Kennzahl",
+      "compare.difference": "Differenz",
       "compare.newBest": "Neue Bestzeit! {diff} s schneller als die bisherige Bestzeit ({time} s).",
       "compare.worldRecordSuffix": "Weltrekord",
       "compare.germanRecordSuffix": "Deutschen Rekord",
@@ -1076,6 +1112,10 @@
       "form.label.breaths2": "Breaths, 2nd half (25–50m)",
       "form.legend.note": "Note (optional)",
       "form.submit": "Analyze race",
+      "form.editingNotice": "You're editing an existing entry.",
+      "form.editCancel": "Cancel",
+      "form.saveEdit": "Save changes",
+      "history.edit": "Edit",
       "stroke.freistil": "Freestyle",
       "stroke.ruecken": "Backstroke",
       "stroke.brust": "Breaststroke",
@@ -1120,6 +1160,7 @@
       "chart.swolfExplain": "SWOLF (\"Swim\" + \"Golf\") measures your swimming efficiency: seconds per length plus number of strokes — just like golf, a <strong>lower</strong> score is better. This value is only comparable to your own past times, not to other swimmers (differences in height/wingspan strongly affect it).",
       "chart.swolfNotEnoughData": "Not enough races with a recorded 25m split and stroke count yet for a SWOLF chart (at least 2 needed).",
       "history.heading": "Your History",
+      "history.table.compare": "Cmp.",
       "history.table.date": "Date",
       "history.table.category": "Category",
       "history.table.race": "Race",
@@ -1153,6 +1194,12 @@
       "compare.behindRecordNoName": "{diff}s behind the {label} ({time}s).",
       "compare.aheadRecordNoName": "{diff}s ahead of the {label} ({time}s).",
       "compare.noPreviousBest": "No best time yet for this stroke/course — add one above under \"Manage Best Times\" or analyze a race.",
+      "compare.button": "Compare selected",
+      "compare.pickTwo": "Please select exactly two races to compare.",
+      "compare.heading": "Race Comparison",
+      "compare.back": "← Back to history",
+      "compare.metric": "Metric",
+      "compare.difference": "Difference",
       "compare.newBest": "New best time! {diff}s faster than your previous best ({time}s).",
       "compare.worldRecordSuffix": "World Record",
       "compare.germanRecordSuffix": "German Record",
@@ -1787,16 +1834,16 @@
       renderRecordBar("wr-bar-pb", "wr-caption-pb", previousBest, t("compare.personalBestLabel"), pbPointsValue, punkteFuerPB);
     }
 
-    // 7. Verlauf: aktuellen Eintrag in die Datenbank schreiben (statt localStorage)
-    // und Tabelle neu aufbauen. "meinName" kommt vom Login-Bildschirm, wird dort
-    // schon dauerhaft gespeichert.
+    // 7. Verlauf: Eintrag in die Datenbank schreiben — entweder neu anlegen
+    // (INSERT) oder, falls gerade ein bestehender Eintrag bearbeitet wird,
+    // aktualisieren (UPDATE). "meinName" kommt vom Login-Bildschirm.
     const category = document.getElementById("category").value;
     const raceDateInput = document.getElementById("date").value; // Format: JJJJ-MM-TT oder leer
     const raceDate = raceDateInput === "" ? null : raceDateInput;
     const notizInput = document.getElementById("notiz").value.trim();
     const notiz = notizInput === "" ? null : notizInput;
 
-    const { error: insertError } = await sb.from("renneintraege").insert({
+    const datensatz = {
       schwimmer_name: meinName,
       kategorie: category,
       lage: stroke,
@@ -1811,11 +1858,24 @@
       atemzuege2: atemzuege2,
       renndatum: raceDate,
       notiz: notiz,
-    });
+    };
 
-    if (insertError) {
-      alert(t("error.save") + " " + insertError.message);
+    const speicherFehler = bearbeiteEintragId
+      ? (await sb.from("renneintraege").update(datensatz).eq("id", bearbeiteEintragId)).error
+      : (await sb.from("renneintraege").insert(datensatz)).error;
+
+    if (speicherFehler) {
+      alert(t("error.save") + " " + speicherFehler.message);
       return;
+    }
+
+    // Bearbeitungsmodus zurücksetzen (falls aktiv) — Banner ausblenden,
+    // Button-Text zurücksetzen, damit das nächste Absenden wieder ein neuer
+    // Eintrag ist statt eine erneute Aktualisierung.
+    if (bearbeiteEintragId) {
+      bearbeiteEintragId = null;
+      document.getElementById("edit-banner").style.display = "none";
+      document.getElementById("form-submit-btn").textContent = t("form.submit");
     }
 
     await renderHistory();
@@ -1832,6 +1892,46 @@
   // gezeichnet werden kann, ohne die Datenbank erneut zu fragen.
   let letzterVerlauf = [];
   let progressChart = null; // die Chart.js-Instanz, zum späteren Aktualisieren/Zerstören
+
+  // Falls gesetzt, wird beim nächsten Absenden des Formulars der bestehende
+  // Eintrag mit dieser ID aktualisiert statt ein neuer Eintrag angelegt.
+  let bearbeiteEintragId = null;
+
+  // Füllt das Formular mit den Werten eines bestehenden Eintrags und
+  // schaltet in den Bearbeiten-Modus um (siehe "bearbeiteEintragId" oben).
+  function bearbeiteEintrag(entry) {
+    bearbeiteEintragId = entry.id;
+    document.getElementById("stroke").value = entry.lage;
+    document.getElementById("course").value = entry.bahnlaenge;
+    updateCourseUI(); // Sichtbarkeit von "Split bei 40m" aktualisieren
+    document.getElementById("category").value = entry.kategorie;
+    document.getElementById("date").value = entry.renndatum || "";
+    document.getElementById("split15").value = entry.split15 !== null ? entry.split15 : "";
+    document.getElementById("split25").value = entry.split25 !== null ? entry.split25 : "";
+    document.getElementById("split40").value = entry.split40 !== null ? entry.split40 : "";
+    document.getElementById("split50").value = entry.gesamtzeit;
+    document.getElementById("strokes1").value = entry.strokes1 !== null ? entry.strokes1 : "";
+    document.getElementById("strokes2").value = entry.strokes2 !== null ? entry.strokes2 : "";
+    document.getElementById("atemzuege1").value = entry.atemzuege1 !== null && entry.atemzuege1 !== undefined ? entry.atemzuege1 : "";
+    document.getElementById("atemzuege2").value = entry.atemzuege2 !== null && entry.atemzuege2 !== undefined ? entry.atemzuege2 : "";
+    document.getElementById("notiz").value = entry.notiz || "";
+
+    document.getElementById("edit-banner").style.display = "block";
+    document.getElementById("form-submit-btn").textContent = t("form.saveEdit");
+
+    showPage("analyse");
+    document.getElementById("race-form").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.getElementById("edit-cancel-link").addEventListener("click", function (e) {
+    e.preventDefault();
+    bearbeiteEintragId = null;
+    document.getElementById("race-form").reset();
+    document.getElementById("results").style.display = "none";
+    document.getElementById("edit-banner").style.display = "none";
+    document.getElementById("form-submit-btn").textContent = t("form.submit");
+    updateCourseUI();
+  });
 
   // Zeigt einen einzelnen gespeicherten Renn-Eintrag auf einer eigenen Seite,
   // mit denselben Informationen wie bei einer frischen Auswertung (KPI-Kacheln,
@@ -2134,12 +2234,14 @@
       const tr = document.createElement("tr");
       const notizIcon = entry.notiz ? `<span title="${t("detail.noteHeading")}" style="margin-left:0.4rem;">📝</span>` : "";
       tr.innerHTML = `
+        <td><input type="checkbox" class="compare-checkbox" data-id="${entry.id}"></td>
         <td>${eintragDatum}</td>
         <td>${categoryLabel(entry.kategorie) || entry.kategorie}</td>
         <td>50${einheit(entry.bahnlaenge)} ${strokeLabelShort(entry.lage)} (${courseLabelShort(entry.bahnlaenge)})${notizIcon}</td>
         <td class="num">${fmt(entry.gesamtzeit)} s</td>
         <td style="white-space:nowrap;">
           <button type="button" data-id="${entry.id}" class="details-toggle" style="padding:0.3rem 0.6rem; font-size:0.75rem; background:var(--aqua); color:var(--navy); margin-right:0.4rem;">${t("history.viewDetails")}</button>
+          <button type="button" data-id="${entry.id}" class="edit-entry" style="padding:0.3rem 0.6rem; font-size:0.75rem; background:var(--paper); color:var(--navy); border:1px solid var(--line); margin-right:0.4rem;">${t("history.edit")}</button>
           <button type="button" data-id="${entry.id}" class="delete-entry" style="padding:0.3rem 0.6rem; font-size:0.75rem; background:var(--line); color:var(--ink);">${t("history.delete")}</button>
         </td>
       `;
@@ -2157,6 +2259,14 @@
       });
     });
 
+    // Bearbeiten-Buttons: füllen das Formular mit den bestehenden Werten
+    document.querySelectorAll(".edit-entry").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const entry = letzterVerlauf.find(e => e.id === Number(btn.dataset.id));
+        if (entry) bearbeiteEintrag(entry);
+      });
+    });
+
     // Lösch-Buttons verdrahten: löscht den Eintrag direkt aus der Datenbank
     document.querySelectorAll(".delete-entry").forEach(btn => {
       btn.addEventListener("click", async () => {
@@ -2169,6 +2279,80 @@
         renderHistory();
       });
     });
+
+    // Vergleichs-Checkboxen: höchstens zwei gleichzeitig auswählbar, Button
+    // erscheint erst, wenn genau zwei ausgewählt sind.
+    const compareBtn = document.getElementById("compare-btn");
+    function aktualisiereVergleichsButton() {
+      const ausgewaehlt = document.querySelectorAll(".compare-checkbox:checked");
+      compareBtn.style.display = ausgewaehlt.length === 2 ? "inline-block" : "none";
+    }
+    document.querySelectorAll(".compare-checkbox").forEach(cb => {
+      cb.addEventListener("change", function () {
+        const ausgewaehlt = document.querySelectorAll(".compare-checkbox:checked");
+        if (ausgewaehlt.length > 2) {
+          this.checked = false; // dritte Auswahl wieder abwählen
+        }
+        aktualisiereVergleichsButton();
+      });
+    });
+  }
+
+  // Rennvergleich: zwei ausgewählte Einträge nebeneinanderstellen. Nutzt
+  // dieselbe Berechnungsfunktion wie Detail-Seite und Formular, damit die
+  // Werte garantiert übereinstimmen.
+  document.getElementById("compare-btn").addEventListener("click", function () {
+    const ids = Array.from(document.querySelectorAll(".compare-checkbox:checked")).map(cb => Number(cb.dataset.id));
+    if (ids.length !== 2) {
+      alert(t("compare.pickTwo"));
+      return;
+    }
+    const [entryA, entryB] = ids.map(id => letzterVerlauf.find(e => e.id === id));
+    zeigeVergleich(entryA, entryB);
+  });
+
+  function zeigeVergleich(entryA, entryB) {
+    const strokeLabels = { freistil: "Freistil", ruecken: "Rücken", brust: "Brust", schmetterling: "Schmetterling" };
+    const dateLocale = currentLang === "de" ? "de-DE" : "en-US";
+
+    function datumVon(entry) {
+      return entry.renndatum
+        ? new Date(entry.renndatum + "T00:00:00").toLocaleDateString(dateLocale)
+        : new Date(entry.created_at).toLocaleDateString(dateLocale);
+    }
+
+    document.getElementById("vgl-header-a").textContent = datumVon(entryA);
+    document.getElementById("vgl-header-b").textContent = datumVon(entryB);
+
+    const ergebnisA = berechneAuswertung(entryA.bahnlaenge, entryA.lage, entryA.split15, entryA.split25, entryA.split40, entryA.gesamtzeit, entryA.strokes1, entryA.strokes2);
+    const ergebnisB = berechneAuswertung(entryB.bahnlaenge, entryB.lage, entryB.split15, entryB.split25, entryB.split40, entryB.gesamtzeit, entryB.strokes1, entryB.strokes2);
+    const atemA = berechneAtemrhythmus(entryA.strokes1, entryA.strokes2, entryA.atemzuege1, entryA.atemzuege2);
+    const atemB = berechneAtemrhythmus(entryB.strokes1, entryB.strokes2, entryB.atemzuege1, entryB.atemzuege2);
+
+    // Jede Zeile: Bezeichnung, Wert A, Wert B, Differenz-Berechnung (optional,
+    // nur bei Zahlenwerten sinnvoll — bei Text einfach leer lassen)
+    const zeilen = [
+      { label: t("history.table.race"), a: `50${einheit(entryA.bahnlaenge)} ${strokeLabels[entryA.lage]} (${courseLabelPlain(entryA.bahnlaenge)})`, b: `50${einheit(entryB.bahnlaenge)} ${strokeLabels[entryB.lage]} (${courseLabelPlain(entryB.bahnlaenge)})`, diff: "" },
+      { label: t("history.table.category"), a: categoryLabel(entryA.kategorie), b: categoryLabel(entryB.kategorie), diff: "" },
+      { label: t("results.kpi.total"), a: fmt(entryA.gesamtzeit) + " s", b: fmt(entryB.gesamtzeit) + " s", diff: fmt(entryA.gesamtzeit - entryB.gesamtzeit) + " s" },
+      { label: t("results.kpi.speed"), a: fmt(ergebnisA.avgSpeed) + " " + einheit(entryA.bahnlaenge) + "/s", b: fmt(ergebnisB.avgSpeed) + " " + einheit(entryB.bahnlaenge) + "/s", diff: fmt(ergebnisA.avgSpeed - ergebnisB.avgSpeed) + " " + einheit(entryA.bahnlaenge) + "/s" },
+      { label: t("results.kpi.fade"), a: ergebnisA.fade !== null ? pct(ergebnisA.fade) : "–", b: ergebnisB.fade !== null ? pct(ergebnisB.fade) : "–", diff: "" },
+      { label: t("results.kpi.swolf"), a: ergebnisA.swolfAvg !== null ? fmt(ergebnisA.swolfAvg, 1) : "–", b: ergebnisB.swolfAvg !== null ? fmt(ergebnisB.swolfAvg, 1) : "–", diff: (ergebnisA.swolfAvg !== null && ergebnisB.swolfAvg !== null) ? fmt(ergebnisA.swolfAvg - ergebnisB.swolfAvg, 1) : "" },
+      { label: t("results.kpi.breathRatio"), a: atemA !== null ? t("results.breathRatioValue").replace("{n}", atemA) : "–", b: atemB !== null ? t("results.breathRatioValue").replace("{n}", atemB) : "–", diff: "" },
+      { label: t("form.label.split15"), a: entryA.split15 !== null ? fmt(entryA.split15) + " s" : "–", b: entryB.split15 !== null ? fmt(entryB.split15) + " s" : "–", diff: "" },
+      { label: t("form.label.split25"), a: entryA.split25 !== null ? fmt(entryA.split25) + " s" : "–", b: entryB.split25 !== null ? fmt(entryB.split25) + " s" : "–", diff: "" },
+      { label: t("form.label.split40"), a: entryA.split40 !== null ? fmt(entryA.split40) + " s" : "–", b: entryB.split40 !== null ? fmt(entryB.split40) + " s" : "–", diff: "" },
+    ];
+
+    const tbody = document.getElementById("vgl-table");
+    tbody.innerHTML = "";
+    zeilen.forEach(zeile => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${zeile.label}</td><td class="num">${zeile.a}</td><td class="num">${zeile.b}</td><td class="num">${zeile.diff}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    showPage("vergleich");
   }
 
   // Zeichnet (oder aktualisiert) das Zeitverlauf-Diagramm für die aktuell im
@@ -2378,6 +2562,7 @@
     document.getElementById("page-bestzeiten").style.display = page === "bestzeiten" ? "block" : "none";
     document.getElementById("page-umrechner").style.display = page === "umrechner" ? "block" : "none";
     document.getElementById("page-bestenliste").style.display = page === "bestenliste" ? "block" : "none";
+    document.getElementById("page-vergleich").style.display = page === "vergleich" ? "block" : "none";
     document.getElementById("page-verlaufdetail").style.display = page === "verlaufdetail" ? "block" : "none";
     document.getElementById("nav-analyse").classList.toggle("active", page === "analyse");
     document.getElementById("nav-bestzeiten").classList.toggle("active", page === "bestzeiten");
@@ -2392,6 +2577,7 @@
   document.getElementById("nav-bestenliste").addEventListener("click", () => showPage("bestenliste"));
   document.getElementById("vd-zurueck-btn").addEventListener("click", () => showPage(herkunftsSeite));
   document.getElementById("vd-pdf-btn").addEventListener("click", () => window.print());
+  document.getElementById("vgl-zurueck-btn").addEventListener("click", () => showPage("analyse"));
   showPage("analyse"); // Startseite
 
   // Bestenliste: lädt ALLE Renneinträge (nicht nur die eigenen) für die
